@@ -1,0 +1,27 @@
+var googleUser = {};
+var startApp = function() {
+  gapi.load('auth2', function(){
+    // Retrieve the singleton for the GoogleAuth library and set up the client.
+    auth2 = gapi.auth2.init({
+      client_id: 'WRITE CLIENT ID IN HERE',
+      cookiepolicy: 'single_host_origin',
+      // Request scopes in addition to 'profile' and 'email'
+      scope: 'profile email'
+    });
+    attachSignin(document.getElementById('customBtn'));
+  });
+};
+
+function attachSignin(element) {
+  console.log(element.id);
+  auth2.attachClickHandler(element, {},
+      function(googleUser) {
+        console.log("User : ", googleUser);
+        console.log("User Profile : ", googleUser.getBasicProfile());
+        document.getElementById('name').innerText = "Signed in: " +
+            googleUser.getBasicProfile().getName();
+      }, function(error) {
+        alert(JSON.stringify(error, undefined, 2));
+      });
+}
+startApp();
